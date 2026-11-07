@@ -2,14 +2,26 @@
   "name": "model-browser",
   "version": "0.3.0",
   "description": "Local STL and 3MF model browser",
+  "productName": "ModelBrowser",
+  "author": "ModelBrowser contributors",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "node": "^24.0.0 || ^26.0.0" },
   "main": "main.cjs",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "package": "node build.cjs"
+    "test": "node scripts/test.cjs",
+    "check": "node scripts/check.cjs",
+    "package": "node scripts/package.cjs --dir",
+    "dist": "node scripts/package.cjs",
+    "release:source": "node scripts/source-archive.cjs",
+    "release:checksums": "node scripts/checksums.cjs"
   },
   "devDependencies": {
-    "electron": "45.2.1"
+    "electron": "45.2.1",
+    "electron-builder": "26.18.0",
+    "linkedom": "0.18.12"
   },
   "dependencies": {
     "three": "0.187.0"

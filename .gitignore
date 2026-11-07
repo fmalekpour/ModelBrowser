@@ -1,3 +1,16 @@
 node_modules/
 dist/
 work/
+.test-work/
+.cache/
+coverage/
+*.log
+*.tmp
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.pem
+Thumbs.db
+.DS_Store

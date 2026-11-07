@@ -1,77 +1,99 @@
-# ModelBrowser 0.3.0
+# ModelBrowser
 
-A local Windows desktop browser for STL and 3MF models, built with Electron and Three.js. No server or account is required.
+**An offline desktop library browser for STL and 3MF models.** Browse a folder of 3D-printing files as thumbnails, select a model, and inspect it in an interactive preview.
 
-## Run
+ModelBrowser is free and open source under the [MIT license](LICENSE). The current version is **0.3.0**. Windows x64 is the supported packaged platform.
 
-Double-click `dist/ModelBrowser/ModelBrowser.exe` after packaging. Keep the entire folder together; the executable depends on the accompanying files.
+## Features
 
-For development, open a terminal in this project and run:
+- Browse local folders and optional subfolders without importing or moving files.
+- Search filenames and paths, filter STL/3MF, sort, and page through large libraries.
+- Generate thumbnails in a separate background process, with cancellation and configurable limits.
+- Rotate, zoom, and pan the selected model; use camera presets or wireframe mode.
+- View triangle counts, dimensions, and file sizes; reveal a model in Explorer.
+- Customize 29 settings, including thumbnail size/resolution, page size, colors, camera controls, cache policy, and performance limits.
+- Keep settings between launches. Inspect and clear the thumbnail cache from Settings.
 
-```powershell
-npm install
-npm start
-```
+The app operates locally. It does not upload models, require an account, or use a hosted backend.
 
-Use Node.js LTS. The optional Node native build tools, Visual Studio, and Rust are not needed.
+## Install on Windows
+
+1. Open this repository's **Releases** page.
+2. Download **`ModelBrowser-Setup-0.3.0-x64.exe`** for Windows x64.
+3. Run setup and choose an installation folder.
+4. Launch **ModelBrowser** from the Start menu or desktop shortcut.
+
+Node.js and development tools are **not** required to run the installed app. The installer is currently unsigned, so Windows may identify it as an unknown publisher. Release assets include SHA-256 checksums for verifying downloads.
+
+To update, close ModelBrowser and run the newer version's setup executable. It replaces the installed program while preserving settings and cached thumbnails. Updates are downloaded manually from Releases; an in-app automatic updater is not included.
+
+If you used an earlier portable build, install the new version normally and use its shortcut. Setup does not patch an arbitrary old portable folder. Keep that folder until you have verified the installed app and your settings.
 
 ## Use
 
-- Open folder: select your STL/3MF directory.
-- Subfolders: include nested directories (symbolic links are skipped).
-- Search: filter filenames and relative paths across the entire folder; the format menu filters STL or 3MF. Previous/Next browse pages of 60 models.
-- Click a card to load the full 3D preview. Left drag rotates, right drag pans, and the wheel zooms.
-- Fit view and Front/Top/Right reposition the camera. Wireframe displays mesh edges.
-- Drag the center divider to resize the preview, or focus it and use the arrow keys.
-- Refresh rescans the folder after files change. Show in Explorer selects the current file.
+Click **Open folder**, choose a directory containing `.stl` or `.3mf` files, then select a thumbnail.
 
-Thumbnails are generated for visible cards in a separate background renderer process and cached in the application's user-data directory (`%APPDATA%/model-browser/thumbnails-v1` in development; the packaged app's directory name may differ). Changed files and thumbnail appearance settings receive new cache keys. Default limits are 120 thumbnail images in memory, 512 MB on disk, 30 days without use, 30 seconds per thumbnail, and a worker restart every 50 models. Changing pages, filters, or folders cancels obsolete work. No model files are modified or uploaded.
+| Control | Action |
+| --- | --- |
+| Left mouse drag | Rotate the preview |
+| Right mouse drag | Pan |
+| Mouse wheel | Zoom |
+| Fit view | Reframe the model |
+| Front / Top / Right | Set a standard camera angle |
+| Wireframe | Show mesh edges |
+| Divider drag | Resize the preview panel |
+| Refresh | Rescan changed files |
+| Settings | Adjust layout, rendering, caching, and limits |
 
-## Settings
+Search covers the entire scanned folder, not just the current page. Thumbnail generation begins with visible cards; cached previews make later visits faster.
 
-Open **Settings** in the header. Adjust values, then choose **Save changes**. Cancel discards edits; Restore defaults loads defaults into the form until saved. Settings persist between launches, and existing last-folder preferences migrate automatically. The app version appears in the title, header, and settings page.
+## Settings and cache
 
-- Library: card width, 12–240 models per page, sort field and direction, subfolders, reopen-last-folder behavior, automatic thumbnails, and scan limit.
-- Thumbnails and cache: render resolution and angle; memory-and-disk, memory-only, or no-cache policy; memory count, disk budget, and expiry. An expiry of 0 disables age-based eviction. Disk eviction removes the least recently used images first.
-- Preview: camera angle, panel width, background, STL color, lighting, display pixel ratio, and initial wireframe mode.
-- Mouse and motion: rotation, zoom and pan speeds, automatic rotation, and rotation speed.
-- Performance: model size limit, thumbnail timeout, and worker recycling interval.
-- Cache management: current usage, storage location, and Clear thumbnail cache. This removes only generated images. Memory-only and no-cache policies do not delete existing disk files automatically.
+Open **Settings**, adjust values, and choose **Save changes**. **Cancel** discards edits. **Restore defaults** loads defaults into the form; save to apply them.
 
-Saved changes apply immediately; changes to scan limits or subfolder behavior rescan the current folder. A selected STL updates its color without reloading. Higher page counts, resolution, file limits, and cache sizes can consume more memory or disk space.
+| Area | Examples |
+| --- | --- |
+| Library | Card width, models per page, sort order, subfolders, reopen last folder |
+| Thumbnails | Render resolution, camera angle, automatic generation |
+| Cache | Memory-and-disk, memory-only, or no-cache mode; size and expiry limits |
+| Preview | Background/STL colors, lighting, panel width, default view, wireframe |
+| Interaction | Rotation, zoom, pan, automatic rotation |
+| Performance | File size, scan limit, thumbnail timeout, worker recycling |
 
-## Package Windows app
+Default limits are **60 models per page**, **120 cached images in memory**, **512 MB disk cache**, **30 days without use**, **150 MB per model**, and **20,000 files per scan**. Most limits can be adjusted in Settings. Increasing them can increase resource use.
+
+Settings and thumbnails are stored in the user's application-data directory, separate from the installed program. Settings shows the actual cache location and usage. Cache clearing deletes generated images only; it does not modify model files. Installer upgrades and uninstall retain the user profile.
+
+## Limitations
+
+- STL files do not define units. Dimensions are shown in model coordinates.
+- Some slicer-specific 3MF extensions and materials are not supported by the Three.js loader.
+- A particularly complex selected model can pause its full-resolution preview while parsing.
+- Folder changes require **Refresh**; live filesystem watching is not implemented.
+- The packaged target is Windows x64. Other desktop platforms require additional packaging and testing.
+
+## Run from source
+
+Install Node.js **24.x or 26.x** and Git, then clone or extract the source:
 
 ```powershell
-npm run package
+npm ci
+npm start
 ```
 
-This produces a standalone Windows x64 application folder under `dist`. Users running that package do not need Node. This first version is unsigned and has no installer or automatic updater.
+No Visual Studio, Rust, or optional Node native-module build tools are required. The first dependency/runtime download requires internet access.
 
-## Current limits
+```powershell
+npm run check       # Syntax and manifest checks
+npm test            # Parser, library, settings, cache, and worker tests
+npm run package     # Runnable build: dist/win-unpacked/
+npm run dist        # Windows setup executable: dist/
+```
 
-- Defaults are 150 MB per model and 20,000 matching files per scan; Settings permits up to 500 MB and 100,000 files.
-- Thumbnail parsing runs separately from the interface. Selecting a particularly complex model can still briefly pause the interactive preview during its full-resolution load.
-- STL coordinates have no inherent unit. Dimensions display raw model coordinates, in X/Y/Z order, assuming the usual Z-up printing convention.
-- Three.js supports core 3MF models and some extensions. Slicer-specific metadata, some materials, and advanced 3MF extensions may not display accurately. Test your actual slicer exports.
-- Thumbnails are static 3D renders; the selected model is fully interactive.
-- Refresh is manual; filesystem watching and per-object controls are not included yet.
-- Only Windows x64 is packaged here. Electron and the app's core code can also target macOS and Linux with platform-specific packaging.
+Read the [developer guide](docs/DEVELOPMENT.md) for architecture, tests, and implementation details. Read the [release guide](docs/RELEASING.md) for publishing the source ZIP and Windows installer as separate GitHub downloads.
 
-## Files
+## Contributing and licensing
 
-- `main.cjs`: folder access, settings, thumbnail cache, desktop window.
-- `preload.cjs`: restricted bridge between the interface and filesystem operations.
-- `renderer.js`: model loading, rendering, controls, and grid.
-- `style.css` / `index.html`: interface.
-- `build.cjs`: Windows packaging.
-- `settings-schema.mjs` / `settings-view.js`: validated preferences and settings interface.
-- `disk-cache.cjs`: cache size, expiry, eviction, and clearing.
+See [CONTRIBUTING.md](CONTRIBUTING.md), the [changelog](CHANGELOG.md), and [third-party notices](THIRD_PARTY_NOTICES.md). Include the app version and reproducible steps when reporting an issue; share model files only when you have permission to do so.
 
-The renderer has Node integration disabled, context isolation and sandboxing enabled, and a restrictive content policy. Dependencies are pinned by `package-lock.json`.
-
-## Validation
-
-JavaScript syntax checks and direct parser checks passed for ASCII STL, binary STL, and a generated 3MF ZIP, including triangle counts and dimensions. Version 0.2 adds tests for a generated 600-file directory, recursive scanning, scan limits, pagination and search, bounded cache size, DOM interactions, serial thumbnail scheduling, cancellation, timeouts, worker crashes, and renderer recycling. Desktop launch remains blocked by the development agent's restricted Windows environment, so actual background WebGL rendering still needs verification in a normal desktop session. No sandbox-disabling flags are included in the packaged app.
-
-Version 0.3 tests cover all 29 settings, input validation, settings migration and persistence, title version, settings form save/cancel/reset, dynamic layout, cache invalidation, LRU eviction, expiry, memory-only/no-cache behavior, and safe cache clearing. Automated DOM tests use a simulated renderer; visual desktop verification remains subject to the launch limitation above.
+Copyright © 2026 ModelBrowser contributors. Licensed under [MIT](LICENSE). Dependencies retain their own licenses.

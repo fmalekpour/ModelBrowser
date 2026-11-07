@@ -1,0 +1,34 @@
+{
+  "appId": "org.modelbrowser.desktop",
+  "productName": "ModelBrowser",
+  "asar": true,
+  "npmRebuild": false,
+  "electronDownload": { "cache": ".cache/electron" },
+  "directories": { "output": "dist" },
+  "files": [
+    "package.json", "main.cjs", "preload.cjs", "renderer.js", "index.html", "style.css",
+    "model-engine.js", "library-state.mjs", "scan-files.cjs", "disk-cache.cjs",
+    "settings-schema.mjs", "settings-view.js", "thumbnail-service.cjs",
+    "thumbnail-preload.cjs", "thumbnail-renderer.js", "thumbnail.html",
+    "LICENSE", "README.md", "THIRD_PARTY_NOTICES.md"
+  ],
+  "win": {
+    "target": [{ "target": "nsis", "arch": ["x64"] }],
+    "executableName": "ModelBrowser",
+    "artifactName": "ModelBrowser-Setup-${version}-${arch}.${ext}",
+    "signAndEditExecutable": false
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowElevation": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "ModelBrowser",
+    "deleteAppDataOnUninstall": false,
+    "differentialPackage": false,
+    "runAfterFinish": false,
+    "license": "LICENSE"
+  }
+}

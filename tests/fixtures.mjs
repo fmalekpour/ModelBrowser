@@ -1,0 +1,14 @@
+import fs from 'node:fs/promises';
+import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
+await fs.mkdir(new URL('../.test-work/fixtures/',import.meta.url),{recursive:true});
+const vertices=[[0,0,0],[30,0,0],[0,24,0],[0,0,40]];
+const faces=[[0,2,1],[0,1,3],[1,2,3],[2,0,3]];
+let stl='solid test\n';
+for(const face of faces)stl+='facet normal 0 0 0\nouter loop\n'+face.map(i=>'vertex '+vertices[i].join(' ')).join('\n')+'\nendloop\nendfacet\n';
+stl+='endsolid test\n';
+await fs.writeFile(new URL('../.test-work/fixtures/Tetrahedron.stl',import.meta.url),stl);
+const model=`<?xml version="1.0" encoding="UTF-8"?><model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02"><resources><object id="1" type="model"><mesh><vertices>${vertices.map(v=>`<vertex x="${v[0]}" y="${v[1]}" z="${v[2]}"/>`).join('')}</vertices><triangles>${faces.map(f=>`<triangle v1="${f[0]}" v2="${f[1]}" v3="${f[2]}"/>`).join('')}</triangles></mesh></object></resources><build><item objectid="1"/></build></model>`;
+const rels='<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Target="/3D/3dmodel.model" Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/></Relationships>';
+const types='<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/></Types>';
+await fs.writeFile(new URL('../.test-work/fixtures/Tetrahedron.3mf',import.meta.url),zipSync({'[Content_Types].xml':strToU8(types),'_rels/.rels':strToU8(rels),'3D/3dmodel.model':strToU8(model)}));
+console.log('Created STL and 3MF test fixtures');

@@ -14,9 +14,6 @@ function persistSettings(next=preferences) {
 }
 let thumbnails, thumbnailGeneration=0;
 let win, selectedFolder, records=new Map();
-const smokeIndex=app.isPackaged?-1:process.argv.indexOf('--smoke-test');
-const smokeFolder=smokeIndex>=0?process.argv[smokeIndex+1]:null;
-if(smokeFolder)app.setPath('userData',path.join(__dirname,'work','test-profile'));
 const settingsPath=()=>path.join(app.getPath('userData'),'settings.json');
 const cacheDir=()=>path.join(app.getPath('userData'),'thumbnails-v1');
 function record(id){const r=records.get(id);if(!r)throw Error('File is no longer in the current folder.');return r;}
@@ -28,7 +25,6 @@ app.whenReady().then(async()=>{
  thumbnails=new ThumbnailService(BrowserWindow,ipcMain);
  try{const saved=JSON.parse(await fs.readFile(settingsPath(),'utf8'));preferences=normalizeSettings(saved.preferences);if(preferences.rememberFolder&&typeof saved.folder==='string')selectedFolder=saved.folder;}catch{}
  if(preferences.cacheMode==='disk')await cache.prune(preferences);
- if(smokeFolder)selectedFolder=smokeFolder;
  ipcMain.handle('settings',()=>({folder:selectedFolder,preferences,version:app.getVersion()}));
  ipcMain.handle('save-settings',async(_event,input)=>{
   const next=normalizeSettings(input);await persistSettings(next);preferences=next;
@@ -69,7 +65,6 @@ app.whenReady().then(async()=>{
  win.on('closed',()=>{thumbnails.cancel();app.quit();});
  win.removeMenu();win.webContents.setWindowOpenHandler(()=>({action:'deny'}));win.webContents.on('will-navigate',e=>e.preventDefault());
  await win.loadFile('index.html');
- if(smokeFolder){try{const result=await win.webContents.executeJavaScript(`(async()=>{const sleep=ms=>new Promise(r=>setTimeout(r,ms));for(let i=0;i<200&&!document.querySelector('.card');i++)await sleep(100);const cards=[...document.querySelectorAll('.card')];if(cards.length!==2)throw Error('Expected two model cards, got '+cards.length);const results=[];for(const card of cards){card.click();for(let i=0;i<200;i++){await sleep(100);if(document.body.dataset.preview===card.dataset.id)break;if(document.body.dataset.preview==='error')throw Error(document.querySelector('#previewStatus').textContent);}if(document.body.dataset.preview!==card.dataset.id)throw Error('Preview timed out');results.push(document.querySelector('#modelName').textContent);}for(let i=0;i<200&&document.querySelectorAll('.card img').length<2;i++)await sleep(100);if(document.querySelectorAll('.card img').length!==2)throw Error('Missing thumbnails');return {models:results,thumbnails:2,canvas:document.querySelectorAll('canvas').length};})()`);console.log('SMOKE PASS',JSON.stringify(result));app.exit(0);}catch(e){console.error('SMOKE FAIL',e);app.exit(1);}}
 });
 app.on('window-all-closed',()=>app.quit());
 
