@@ -1,0 +1,17 @@
+{
+  "name": "model-browser",
+  "version": "0.3.0",
+  "description": "Local STL and 3MF model browser",
+  "main": "main.cjs",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "package": "node build.cjs"
+  },
+  "devDependencies": {
+    "electron": "45.2.1"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  }
+}
