@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+- Fixed installed/unpacked startup: explicitly package Three.js addons that were omitted from v0.3.0.
+- Added a packaging gate that checks both browser entry points, every imported module, and import-map CSP hashes before building an installer.
+- Added regression tests for missing loaders, controls, and transitive 3MF dependencies.
+
 ## 0.3.0
 
 - Added 29 persistent settings for library layout, thumbnails, cache policy, preview appearance, interaction, and performance.

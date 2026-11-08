@@ -1,6 +1,6 @@
 {
   "name": "model-browser",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Local STL and 3MF model browser",
   "productName": "ModelBrowser",
   "author": "ModelBrowser contributors",
@@ -21,7 +21,8 @@
   "devDependencies": {
     "electron": "45.2.1",
     "electron-builder": "26.18.0",
-    "linkedom": "0.18.12"
+    "linkedom": "0.18.12",
+    "es-module-lexer": "3.0.4"
   },
   "dependencies": {
     "three": "0.187.0"

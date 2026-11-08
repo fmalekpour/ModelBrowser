@@ -11,5 +11,6 @@ ModelBrowser's own source is provided under the MIT license in `LICENSE`. Depend
 
 - **electron-builder** — MIT; downloads NSIS and related prebuilt packaging tools. Those tools carry their own licenses. See <https://github.com/electron-userland/electron-builder>.
 - **LinkeDOM** — ISC; used only for automated DOM tests. See <https://github.com/WebReflection/linkedom>.
+- **ES Module Lexer** — MIT; used only to verify browser imports during packaging and tests. See <https://github.com/guybedford/es-module-lexer>.
 
 The exact dependency tree is recorded in `package-lock.json`; inspect the installed packages for the complete license texts of transitive dependencies. Development dependencies are not bundled as application runtime dependencies. Preserve dependency licenses when redistributing or repackaging the application.

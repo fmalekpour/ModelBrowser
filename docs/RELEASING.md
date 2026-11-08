@@ -1,6 +1,6 @@
 # Publishing source and Windows releases
 
-The current application version is **0.3.0**. Publish one GitHub release named **ModelBrowser v0.3.0**, with independently downloadable source and installer assets. They do not need separate repositories or separate version tags.
+The current application version is **0.3.1**. Publish one GitHub release named **ModelBrowser v0.3.1**, with independently downloadable source and installer assets. They do not need separate repositories or separate version tags.
 
 ## 1. Create the GitHub repository
 
@@ -11,7 +11,7 @@ From the project folder:
 ```powershell
 git status
 git add .
-git commit -m "Prepare ModelBrowser v0.3.0 open-source release"
+git commit -m "Prepare ModelBrowser v0.3.1 open-source release"
 git remote add origin https://github.com/YOUR-USERNAME/ModelBrowser.git
 git push -u origin main
 ```
@@ -37,8 +37,8 @@ Expected assets:
 
 | File | Audience |
 | --- | --- |
-| `dist/ModelBrowser-Setup-0.3.0-x64.exe` | Windows users; installs the app or replaces an older installed version. |
-| `dist/ModelBrowser-0.3.0-source.zip` | Developers; source, license, documentation, tests, workflows, and lockfile. Run `npm ci` after extracting. |
+| `dist/ModelBrowser-Setup-0.3.1-x64.exe` | Windows users; installs the app or replaces an older installed version. |
+| `dist/ModelBrowser-0.3.1-source.zip` | Developers; source, license, documentation, tests, workflows, and lockfile. Run `npm ci` after extracting. |
 | `dist/SHA256SUMS.txt` | SHA-256 hashes of both downloads. |
 
 `dist/win-unpacked/` is the runnable staging build; it is not the installer and should not be committed. `dist/ModelBrowser/`, if present from an earlier build, is the legacy portable app and is not used by the new release pipeline. The obsolete `dist/ModelBrowser-win32-x64/` is no longer used.
@@ -50,8 +50,8 @@ The explicit source ZIP contains a `SOURCE_SHA256SUMS.txt` manifest. GitHub also
 Commit and push all release changes before tagging:
 
 ```powershell
-git tag -a v0.3.0 -m "ModelBrowser v0.3.0"
-git push origin v0.3.0
+git tag -a v0.3.1 -m "ModelBrowser v0.3.1"
+git push origin v0.3.1
 ```
 
 The **Windows release** workflow runs tests, builds the installer, creates the source ZIP and checksums, and creates a **draft** GitHub release with these three assets. The tag must match `package.json` exactly. It does not publish automatically.
@@ -62,13 +62,13 @@ The workflow can also be run manually from Actions to produce downloadable build
 
 ## 3B. Manual release with separate downloads
 
-After committing the release source and creating/pushing `v0.3.0`, open the repository's **Releases → Draft a new release** page:
+After committing the release source and creating/pushing `v0.3.1`, open the repository's **Releases → Draft a new release** page:
 
-1. Select the existing `v0.3.0` tag.
-2. Set the title to `ModelBrowser v0.3.0`.
-3. Paste or adapt [the release notes](releases/v0.3.0.md).
-4. Attach `ModelBrowser-Setup-0.3.0-x64.exe` as the Windows installer.
-5. Attach `ModelBrowser-0.3.0-source.zip` as the separate source download, if desired.
+1. Select the existing `v0.3.1` tag.
+2. Set the title to `ModelBrowser v0.3.1`.
+3. Paste or adapt [the release notes](releases/v0.3.1.md).
+4. Attach `ModelBrowser-Setup-0.3.1-x64.exe` as the Windows installer.
+5. Attach `ModelBrowser-0.3.1-source.zip` as the separate source download, if desired.
 6. Attach `SHA256SUMS.txt`.
 7. Save as draft until you have completed the checks, then publish.
 
@@ -77,8 +77,8 @@ Use either the automated tag workflow or manual creation; do not race both to cr
 Optional GitHub CLI equivalent, after the tag is pushed:
 
 ```powershell
-gh release create v0.3.0 --verify-tag --draft --title "ModelBrowser v0.3.0" --notes-file docs/releases/v0.3.0.md
-gh release upload v0.3.0 dist/ModelBrowser-Setup-0.3.0-x64.exe dist/ModelBrowser-0.3.0-source.zip dist/SHA256SUMS.txt
+gh release create v0.3.1 --verify-tag --draft --title "ModelBrowser v0.3.1" --notes-file docs/releases/v0.3.1.md
+gh release upload v0.3.1 dist/ModelBrowser-Setup-0.3.1-x64.exe dist/ModelBrowser-0.3.1-source.zip dist/SHA256SUMS.txt
 ```
 
 ## Installer and upgrade behavior

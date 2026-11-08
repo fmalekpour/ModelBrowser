@@ -10,8 +10,14 @@
     "model-engine.js", "library-state.mjs", "scan-files.cjs", "disk-cache.cjs",
     "settings-schema.mjs", "settings-view.js", "thumbnail-service.cjs",
     "thumbnail-preload.cjs", "thumbnail-renderer.js", "thumbnail.html",
-    "LICENSE", "README.md", "THIRD_PARTY_NOTICES.md"
+    "LICENSE", "README.md", "THIRD_PARTY_NOTICES.md",
+    {
+      "from": "node_modules/three/examples/jsm",
+      "to": "node_modules/three/examples/jsm",
+      "filter": ["**/*.js"]
+    }
   ],
+  "afterPack": "scripts/after-pack.cjs",
   "win": {
     "target": [{ "target": "nsis", "arch": ["x64"] }],
     "executableName": "ModelBrowser",

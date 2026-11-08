@@ -84,6 +84,8 @@ Keep `package-lock.json` committed. Review dependency changes, run `npm run chec
 
 `electron-builder` packages only the allowlisted app files plus production dependencies. Development dependencies, fixtures, repository metadata, and scratch data are excluded. `dist/`, `node_modules/`, `.cache/`, and `.test-work/` are generated and ignored by Git. Never commit the installer or unpacked Electron runtime.
 
+Three.js runtime addons live under `node_modules/three/examples/jsm`. This directory must be copied explicitly: default dependency pruning treats `examples` as non-runtime content. Do not remove the explicit file mapping from `electron-builder.json`. The `afterPack` hook walks both browser import graphs inside `app.asar`, including transitive modules, and verifies the import-map CSP hashes. Packaging fails before installer generation if any required module is missing. Run `node scripts/package-audit.cjs` to inspect an existing unpacked build.
+
 The stable app identity is `org.modelbrowser.desktop`. The NSIS installer uses this identity to upgrade the existing installation. Preserve it across versions. The installer is per-user, offers a destination-directory choice, creates shortcuts, and retains application data on uninstall. Updates currently mean downloading and running a newer installer; an in-app auto-updater is not implemented.
 
 The build deliberately disables executable signing/resource editing and automatic certificate discovery. Current setup files are unsigned. Configure Windows signing and appropriate executable resources before claiming a verified publisher. No signing credentials belong in this repository.

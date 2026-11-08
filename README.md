@@ -2,7 +2,7 @@
 
 **An offline desktop library browser for STL and 3MF models.** Browse a folder of 3D-printing files as thumbnails, select a model, and inspect it in an interactive preview.
 
-ModelBrowser is free and open source under the [MIT license](LICENSE). The current version is **0.3.0**. Windows x64 is the supported packaged platform.
+ModelBrowser is free and open source under the [MIT license](LICENSE). The current version is **0.3.1**. Windows x64 is the supported packaged platform.
 
 ## Features
 
@@ -19,7 +19,7 @@ The app operates locally. It does not upload models, require an account, or use 
 ## Install on Windows
 
 1. Open this repository's **Releases** page.
-2. Download **`ModelBrowser-Setup-0.3.0-x64.exe`** for Windows x64.
+2. Download **`ModelBrowser-Setup-0.3.1-x64.exe`** for Windows x64.
 3. Run setup and choose an installation folder.
 4. Launch **ModelBrowser** from the Start menu or desktop shortcut.
 
